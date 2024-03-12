@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { router } from './src/router/router';
+import { errorMiddleware } from './src/middleware/ErrorMiddleware';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const start = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use('/api', router);
+  app.use(errorMiddleware);
 
   try {
     await mongoose.connect(process.env.MONGO_URI as string);

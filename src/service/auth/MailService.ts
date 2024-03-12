@@ -4,7 +4,6 @@ export class MailService {
 
 
   async sendActivationMail(to: string, link: string) {
-    console.log("mail", process.env.SMTP_HOST,process.env.SMTP_PORT, process.env.SMTP_USER, process.env.SMTP_PASSWORD);
     const transporter: nodemailer.Transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
