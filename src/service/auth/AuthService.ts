@@ -21,7 +21,6 @@ export class AuthService {
     email: string,
     password: string
   ): Promise<Error | { user: AuthDTO; accessToken: string; refreshToken: string; }> => {
-    try {
       if (!email || !password) {
         throw ApiError.BadRequest("Email and password must not be empty");
       }
@@ -50,7 +49,6 @@ export class AuthService {
           isActivated: false,
         });
       } catch (error) {
-        console.error( "error create UserModel" ,error);
         throw ApiError.InternalServerError();
       }
   
@@ -77,26 +75,14 @@ export class AuthService {
         ...tokens,
         user: authDTO,
       };
-    } catch (error: any) {
-      console.error(error);
-      throw ApiError.InternalServerError();
-    }
   }
   
   activate = async (activationLink: string) => {
-    let user;
-    try {
-      user = await User.findOne({ activationLink });
-    } catch (error) {
-      throw ApiError.InternalServerError();
-    }
-  
+    const user = await User.findOne({ activationLink });
     if (!user) {
       throw ApiError.NotFound("Incorrect activation link");
     }
-  
     user.isActivated = true;
-  
     try {
       await user.save();
     } catch (error) {
